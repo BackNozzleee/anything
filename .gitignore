@@ -1,0 +1,8 @@
+# Ignorar los videos descargados
+*.mp4
+*.m4a
+*.webm
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db

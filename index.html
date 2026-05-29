@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Descargador Local</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #15202b;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .box {
+            background: #192734;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 350px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            box-sizing: border-box;
+            background: #253341;
+            color: white;
+            border: 1px solid #38444d;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #1d9bf0;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1a8cd8;
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <h2>Descargador de X</h2>
+        <input type="text" id="url" placeholder="Pega el enlace del tweet aquí">
+        <button onclick="bajarVideo()">Descargar Video</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function bajarVideo() {
+            const urlInput = document.getElementById('url').value;
+            const statusDiv = document.getElementById('status');
+
+            if (!urlInput) {
+                statusDiv.innerText = "Suelte un enlace válido.";
+                return;
+            }
+
+            statusDiv.innerText = "Procesando y descargando...";
+            statusDiv.style.color = "yellow";
+
+            try {
+                const response = await fetch('http://localhost:8000/api/descargar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: urlInput })
+                });
+
+                if (response.ok) {
+                    statusDiv.innerText = "¡Completado! Revisa la carpeta de tu proyecto.";
+                    statusDiv.style.color = "lightgreen";
+                } else {
+                    statusDiv.innerText = "Error al procesar el enlace.";
+                    statusDiv.style.color = "red";
+                }
+            } catch (err) {
+                statusDiv.innerText = "No se pudo conectar con Python.";
+                statusDiv.style.color = "red";
+            }
+        }
+    </script>
+</body>
+
+</html>
